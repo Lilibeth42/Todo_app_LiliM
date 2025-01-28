@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<div class="position-relative">
+    <a href="{{ url_for('logout') }}" class="btn btn-danger position-absolute" style="top: 10px; right: 10px;">Cerrar Sesión</a>
+</div>
+<div class="container">
+    <h1>Tipos de Comida</h1>
+
+    <!-- Formulario reducido para agregar comidas -->
+    <form action="/agregar" method="post" class="form-agregar">
+        <div class="input-group">
+            <input type="text" name="nombre" class="form-control" placeholder="Nueva comida" required>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+    </form>
+
+    <!-- Tabla compacta para mostrar las comidas -->
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo de Comida</th>
+                <th>¿Probada?</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comida in comidas %}
+            <tr>
+                <td>{{ comida.id }}</td>
+                <td>{{ comida.nombre }}</td>
+                <td>{{ 'Sí' if comida.probada else 'No' }}</td>
+                <td>
+                    <form action="/actualizar/{{ comida.id }}" method="post" style="display: inline;">
+                        {% if comida.probada %}
+                        <button type="submit" class="btn btn-no">No la he probado</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-si">La he probado</button>
+                        {% endif %}
+                    </form>
+                    <form action="/eliminar/{{ comida.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
